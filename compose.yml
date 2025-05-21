@@ -1,0 +1,143 @@
+---
+services:
+  # Web frontend: dispatch requests on the API & serve statics
+  nginx-proxy:
+    image: nginx:mainline
+    ports:
+      - ${PORT_PUBLIC_HTTP}:80
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./data/api_storage:/var/www/static/api_storage/:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "service", "nginx", "status"]
+      start_period: 10s
+      start_interval: 5s
+      interval: 60s
+      timeout: 1s
+      retries: 3
+
+  # API: BIMData
+  api: &API_BASE_DEFINITION
+    image: api:test
+    # image: docker-registry.bimdata.io/on-premises/api:${VERSION}
+    expose:
+      - 8000
+    volumes:
+      - ./data/api_storage:/opt/storage:rw
+    environment:
+      # Web configuration
+      - VIRTUAL_HOST=${API_DNS_NAME}
+      - API_URL=https://${API_DNS_NAME}
+      - ALLOWED_HOSTS=localhost,${API_DNS_NAME}
+
+      # Secret configuration
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+      - SECRET_KEY=${API_SECRET_KEY:?Error:API_SECRET_KEY is required, you must define it to a secure string in then .env file.}
+
+      # Postgres configuration
+      - DB_HOST=${API_DB_HOST}
+      - DB_PORT=${API_DB_PORT}
+      - DB_NAME=${API_DB_NAME}
+      - DB_USER=${API_DB_USER}
+      - DB_PASSWORD=${API_DB_PASSWORD}
+
+      # Rabbitmq configuration
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+
+      # SMTP configuration
+      - SMTP_HOST=${API_SMTP_HOST}
+      - SMTP_PORT=${API_SMTP_PORT}
+      - SMTP_USER=${API_SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - SMTP_USE_TLS=${API_SMTP_USE_TLS}
+      - DEFAULT_FROM_EMAIL=${API_DEFAULT_FROM_EMAIL}
+      - DEBUG_MAIL_TO=${API_DEBUG_MAIL_TO}
+
+      # S3 storage
+      - S3_ENABLED=false
+
+      # TLS, if a custom CA is needed
+      # - CA_CERT=/opt/onprem-ca.crt
+
+      # Misc configuration
+      - ENV=on-premises
+      - WORKERS=5
+      - ADMIN_INTERFACE=True
+      - IAM_SKIP_EXTERNAL_MIGRATION=True
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8000/health/"]
+      start_period: 15s
+      start_interval: 5s
+      interval: 60s
+      timeout: 1s
+      retries: 3
+
+  api-celeri-beat:
+    <<: *API_BASE_DEFINITION
+    command:
+      - celery
+      - --app=bimdata
+      - beat
+      - --scheduler=django_celery_beat.schedulers:DatabaseScheduler
+      - --loglevel=info
+    depends_on:
+      api:
+        condition: service_healthy
+        restart: true
+    # There is not really a good healthcheck for celeri beat
+    healthcheck:
+      disable: true
+
+  api-celeri-worker:
+    <<: *API_BASE_DEFINITION
+    command:
+      - celery
+      - --app=bimdata
+      - worker
+      - --loglevel=info
+    depends_on:
+      api:
+        condition: service_healthy
+        restart: true
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - celery
+        - -b amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@${RABBITMQ_HOST}:${RABBITMQ_PORT}/${RABBITMQ_VHOST}
+        - -d celery@$$HOSTNAME
+      start_period: 10s
+      start_interval: 5s
+      interval: 60s
+      timeout: 3s
+      retries: 3
+
+  # Rabbitmq: not deploy by default, mainly here for dev purpose
+  # You can specify --profile local_rabbit to run it if you don't have an external rabbit
+  rabbitmq:
+    image: rabbitmq:3.12-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    restart: unless-stopped
+    profiles: [local_rabbit]
+
+  # DB: not deploy by default, mainly here for dev purpose
+  # You can specify --profile local_db to run it if you don't have an external db
+  db:
+    image: postgres:17-alpine
+    expose:
+      - ${API_DB_PORT}:5432
+    environment:
+      - POSTGRES_DB=${API_DB_NAME}
+      - POSTGRES_USER=${API_DB_USER}
+      - POSTGRES_PASSWORD=${API_DB_PASSWORD}
+    restart: unless-stopped
+    profiles: [local_db]

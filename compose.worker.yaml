@@ -1,0 +1,358 @@
+---
+services:
+  workers-b2d:
+    image: docker-registry.bimdata.io/on-premises/worker_b2d:${VERSION}
+    environment:
+      - API_URL=https://${API_DNS_NAME}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+
+      - ENV=on-premises
+      - TIMEOUT=${WORKERS_B2D_TIMEOUT:-1800}
+    deploy:
+      replicas: ${WORKERS_B2D_REPLICA:-1}
+      resources:
+        limits:
+          cpus: ${WORKERS_B2D_CPU:-1}
+          memory: ${WORKERS_B2D_MEMORY:-6g}
+    restart: unless-stopped
+
+  workers-dwg-geometries:
+    image: docker-registry.bimdata.io/on-premises/dwg_worker:${VERSION}
+    environment:
+      - API_URL=https://${API_DNS_NAME}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+
+      - ENV=on-premises
+      - WORKER_NAME=geometries
+      - TIMEOUT=${WORKERS_DWG_GEOMETRIES_TIMEOUT:-14400}
+    deploy:
+      replicas: ${WORKERS_DWG_GEOMETRIES_REPLICA:-1}
+      resources:
+        limits:
+          cpus: ${WORKERS_DWG_GEOMETRIES_CPU:-1}
+          memory: ${WORKERS_DWG_GEOMETRIES_MEMORY:-16g}
+    restart: unless-stopped
+
+  workers-dwg-properties:
+    image: docker-registry.bimdata.io/on-premises/dwg_worker:${VERSION}
+    environment:
+      - API_URL=https://${API_DNS_NAME}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+
+      - ENV=on-premises
+      - WORKER_NAME=properties
+      - TIMEOUT=${WORKERS_DWG_PROPERTIES_TIMEOUT:-3600}
+    deploy:
+      replicas: ${WORKERS_DWG_PROPERTIES_REPLICA:-1}
+      resources:
+        limits:
+          cpus: ${WORKERS_DWG_PROPERTIES_CPU:-1}
+          memory: ${WORKERS_DWG_PROPERTIES_MEMORY:-4g}
+    restart: unless-stopped
+
+  workers-elevation:
+    image: docker-registry.bimdata.io/on-premises/elevation_worker:${VERSION}
+    environment:
+      - API_URL=https://${API_DNS_NAME}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+
+      - ENV=on-premises
+      - TIMEOUT=${WORKERS_ELEVATION_TIMEOUT:-900}
+    deploy:
+      replicas: ${WORKERS_ELEVATION_REPLICA:-1}
+      resources:
+        limits:
+          cpus: ${WORKERS_ELEVATION_CPU:-1}
+          memory: ${WORKERS_ELEVATION_MEMORY:-4g}
+    restart: unless-stopped
+
+  workers-export:
+    image: docker-registry.bimdata.io/on-premises/workers:${VERSION}
+    environment:
+      - WORKER_SCRIPT=workers.export
+
+      - API_URL=https://${API_DNS_NAME}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+
+      - ENV=on-premises
+      - CPU:-1_ALLOCATED=1
+      - TIMEOUT=${WORKERS_EXPORT_TIMEOUT:-7200}
+    deploy:
+      replicas: ${WORKERS_EXPORT_REPLICA:-1}
+      resources:
+        limits:
+          cpus: ${WORKERS_EXPORT_CPU:-1}
+          memory: ${WORKERS_EXPORT_MEMORY:-4g}
+    restart: unless-stopped
+
+  workers-extract:
+    image: docker-registry.bimdata.io/on-premises/workers:${VERSION}
+
+    environment:
+      - WORKER_SCRIPT=workers.extract
+
+      - API_URL=https://${API_DNS_NAME}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+
+      - ENV=on-premises
+      - CPU:-1_ALLOCATED=1
+      - TIMEOUT=${WORKERS_EXTRACT_TIMEOUT:-7200}
+    deploy:
+      replicas: ${WORKERS_EXTRACT_REPLICA:-1}
+      resources:
+        limits:
+          cpus: ${WORKERS_EXTRACT_CPU:-1}
+          memory: ${WORKERS_EXTRACT_MEMORY:-4g}
+    restart: unless-stopped
+
+  workers-gltf:
+    image: docker-registry.bimdata.io/on-premises/workers:${VERSION}
+    environment:
+      - WORKER_SCRIPT=workers.gltf
+
+      - API_URL=https://${API_DNS_NAME}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+
+      - ENV=on-premises
+      - CPU:-1_ALLOCATED=1
+      - TIMEOUT=${WORKERS_GLTF_TIMEOUT:-36000}
+    deploy:
+      replicas: ${WORKERS_GLTF_REPLICA:-1}
+      resources:
+        limits:
+          cpus: ${WORKERS_GLTF_CPU:-1}
+          memory: ${WORKERS_GLTF_MEMORY:-32g}
+    restart: unless-stopped
+
+  workers-merge:
+    image: docker-registry.bimdata.io/on-premises/workers:${VERSION}
+    environment:
+      - WORKER_SCRIPT=workers.merge
+
+      - API_URL=https://${API_DNS_NAME}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+
+      - ENV=on-premises
+      - CPU:-1_ALLOCATED=1
+      - TIMEOUT=${WORKERS_MERGE_TIMEOUT:-7200}
+    deploy:
+      replicas: ${WORKERS_MERGE_REPLICA:-1}
+      resources:
+        limits:
+          cpus: ${WORKERS_MERGE_CPU:-1}
+          memory: ${WORKERS_MERGE_MEMORY:-4g}
+    restart: unless-stopped
+
+  workers-pointcloud:
+    image: docker-registry.bimdata.io/on-premises/pointcloud_worker:${VERSION}
+    environment:
+      - API_URL=https://${API_DNS_NAME}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+
+      - ENV=on-premises
+      - CPU:-1_ALLOCATED=1
+      - TIMEOUT=${WORKERS_POINTCLOUD_TIMEOUT:-36000}
+    deploy:
+      replicas: ${WORKERS_POINTCLOUD_REPLICA:-1}
+      resources:
+        limits:
+          cpus: ${WORKERS_POINTCLOUD_CPU:-1}
+          memory: ${WORKERS_POINTCLOUD_MEMORY:-32g}
+    restart: unless-stopped
+
+  workers-preview-2d:
+    image: docker-registry.bimdata.io/on-premises/image_preview_worker:${VERSION}
+    environment:
+      - API_URL=https://${API_DNS_NAME}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+
+      - ENV=on-premises
+      - TIMEOUT=${WORKERS_PREVIEW_2D_TIMEOUT:-600}
+    deploy:
+      replicas: ${WORKERS_PREVIEW_2D_REPLICA:-1}
+      resources:
+        limits:
+          cpus: ${WORKERS_PREVIEW_2D_CPU:-1}
+          memory: ${WORKERS_PREVIEW_2D_MEMORY:-4g}
+    restart: unless-stopped
+
+  workers-preview-3d:
+    image: docker-registry.bimdata.io/on-premises/viewer_360:${VERSION}
+    environment:
+      - API_URL=https://${API_DNS_NAME}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+
+      - ENV=on-premises
+      - TIMEOUT=${WORKERS_PREVIEW_3D_TIMEOUT:-600}
+    deploy:
+      replicas: ${WORKERS_PREVIEW_3D_REPLICA:-1}
+      resources:
+        limits:
+          cpus: ${WORKERS_PREVIEW_3D_CPU:-1}
+          memory: ${WORKERS_PREVIEW_3D_MEMORY:-8g}
+    restart: unless-stopped
+
+  workers-preview-office:
+    image: docker-registry.bimdata.io/on-premises/office_preview_worker:${VERSION}
+    environment:
+      - API_URL=https://${API_DNS_NAME}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+
+      - ENV=on-premises
+      - TIMEOUT=${WORKERS_PREVIEW_OFFICE_TIMEOUT:-600}
+    restart: unless-stopped
+    deploy:
+      replicas: ${WORKERS_PREVIEW_OFFICE_REPLICA:-1}
+      resources:
+        limits:
+          cpus: ${WORKERS_PREVIEW_OFFICE_CPU:-1}
+          memory: ${WORKERS_PREVIEW_OFFICE_MEMORY:-4g}
+
+
+  workers-preview-pdf:
+    image: docker-registry.bimdata.io/on-premises/pdf_preview_worker:${VERSION}
+    environment:
+      - API_URL=https://${API_DNS_NAME}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+
+      - ENV=on-premises
+      - TIMEOUT=${WORKERS_PREVIEW_PDF_TIMEOUT:-600}
+    deploy:
+      replicas: ${WORKERS_PREVIEW_PDF_REPLICA:-1}
+      resources:
+        limits:
+          cpus: ${WORKERS_PREVIEW_PDF_CPU:-1}
+          memory: ${WORKERS_PREVIEW_PDF_MEMORY:-4g}
+    restart: unless-stopped
+
+  workers-svg:
+    image: docker-registry.bimdata.io/on-premises/workers:${VERSION}
+    environment:
+      - WORKER_SCRIPT=workers.svg
+
+      - API_URL=https://${API_DNS_NAME}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+
+      - ENV=on-premises
+      - CPU:-1_ALLOCATED=1
+      - TIMEOUT=${WORKERS_SVG_TIMEOUT:-7200}
+    deploy:
+      replicas: ${WORKERS_SVG_REPLICA:-1}
+      resources:
+        limits:
+          cpus: ${WORKERS_SVG_CPU:-1}
+          memory: ${WORKERS_SVG_MEMORY:-8g}
+    restart: unless-stopped
+
+  workers-xkt:
+    image: docker-registry.bimdata.io/on-premises/xkt_worker:${VERSION}
+    environment:
+      - API_URL=https://${API_DNS_NAME}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+
+      - ENV=on-premises
+      - TIMEOUT=${WORKERS_XKT_TIMEOUT:-600}
+    deploy:
+      replicas: ${WORKERS_XKT_REPLICA:-1}
+      resources:
+        limits:
+          cpus: ${WORKERS_XKT_CPU:-1}
+          memory: ${WORKERS_XKT_MEMORY:-4g}
+    restart: unless-stopped
+
+  workers-xkt-v10:
+    image: docker-registry.bimdata.io/on-premises/xkt_v10_worker:${VERSION}
+    environment:
+      - API_URL=https://${API_DNS_NAME}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+
+      - ENV=on-premises
+      - TIMEOUT=${WORKERS_XKT_V10_TIMEOUT:-600}
+    deploy:
+      replicas: ${WORKERS_XKT_V10_REPLICA:-1}
+      resources:
+        limits:
+          cpus: ${WORKERS_XKT_V10_CPU:-1}
+          memory: ${WORKERS_XKT_V10_MEMORY:-4g}
+    restart: unless-stopped
+
