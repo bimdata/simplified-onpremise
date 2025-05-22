@@ -19,8 +19,7 @@ services:
 
   # API: BIMData
   api: &API_BASE_DEFINITION
-    image: api:test
-    # image: docker-registry.bimdata.io/on-premises/api:${VERSION}
+    image: docker-registry.bimdata.io/on-premises/api:${VERSION}
     expose:
       - 8000
     volumes:
@@ -28,7 +27,7 @@ services:
     environment:
       # Web configuration
       - VIRTUAL_HOST=${API_DNS_NAME}
-      - API_URL=https://${API_DNS_NAME}
+      - API_URL=${API_URL}
       - ALLOWED_HOSTS=localhost,${API_DNS_NAME}
 
       # Secret configuration

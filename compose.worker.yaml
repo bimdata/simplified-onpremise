@@ -3,7 +3,7 @@ services:
   workers-b2d:
     image: docker-registry.bimdata.io/on-premises/worker_b2d:${VERSION}
     environment:
-      - API_URL=https://${API_DNS_NAME}
+      - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
@@ -24,7 +24,7 @@ services:
   workers-dwg-geometries:
     image: docker-registry.bimdata.io/on-premises/dwg_worker:${VERSION}
     environment:
-      - API_URL=https://${API_DNS_NAME}
+      - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
@@ -46,7 +46,7 @@ services:
   workers-dwg-properties:
     image: docker-registry.bimdata.io/on-premises/dwg_worker:${VERSION}
     environment:
-      - API_URL=https://${API_DNS_NAME}
+      - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
@@ -68,7 +68,7 @@ services:
   workers-elevation:
     image: docker-registry.bimdata.io/on-premises/elevation_worker:${VERSION}
     environment:
-      - API_URL=https://${API_DNS_NAME}
+      - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
@@ -91,7 +91,7 @@ services:
     environment:
       - WORKER_SCRIPT=workers.export
 
-      - API_URL=https://${API_DNS_NAME}
+      - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
@@ -116,7 +116,7 @@ services:
     environment:
       - WORKER_SCRIPT=workers.extract
 
-      - API_URL=https://${API_DNS_NAME}
+      - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
@@ -140,7 +140,7 @@ services:
     environment:
       - WORKER_SCRIPT=workers.gltf
 
-      - API_URL=https://${API_DNS_NAME}
+      - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
@@ -164,7 +164,7 @@ services:
     environment:
       - WORKER_SCRIPT=workers.merge
 
-      - API_URL=https://${API_DNS_NAME}
+      - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
@@ -186,7 +186,7 @@ services:
   workers-pointcloud:
     image: docker-registry.bimdata.io/on-premises/pointcloud_worker:${VERSION}
     environment:
-      - API_URL=https://${API_DNS_NAME}
+      - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
@@ -208,7 +208,7 @@ services:
   workers-preview-2d:
     image: docker-registry.bimdata.io/on-premises/image_preview_worker:${VERSION}
     environment:
-      - API_URL=https://${API_DNS_NAME}
+      - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
@@ -229,7 +229,7 @@ services:
   workers-preview-3d:
     image: docker-registry.bimdata.io/on-premises/viewer_360:${VERSION}
     environment:
-      - API_URL=https://${API_DNS_NAME}
+      - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
@@ -250,7 +250,7 @@ services:
   workers-preview-office:
     image: docker-registry.bimdata.io/on-premises/office_preview_worker:${VERSION}
     environment:
-      - API_URL=https://${API_DNS_NAME}
+      - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
@@ -272,7 +272,7 @@ services:
   workers-preview-pdf:
     image: docker-registry.bimdata.io/on-premises/pdf_preview_worker:${VERSION}
     environment:
-      - API_URL=https://${API_DNS_NAME}
+      - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
@@ -295,7 +295,7 @@ services:
     environment:
       - WORKER_SCRIPT=workers.svg
 
-      - API_URL=https://${API_DNS_NAME}
+      - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
@@ -317,7 +317,7 @@ services:
   workers-xkt:
     image: docker-registry.bimdata.io/on-premises/xkt_worker:${VERSION}
     environment:
-      - API_URL=https://${API_DNS_NAME}
+      - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
@@ -338,7 +338,7 @@ services:
   workers-xkt-v10:
     image: docker-registry.bimdata.io/on-premises/xkt_v10_worker:${VERSION}
     environment:
-      - API_URL=https://${API_DNS_NAME}
+      - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
