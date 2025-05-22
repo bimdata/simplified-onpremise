@@ -3,9 +3,9 @@
 This project use Docker & Docker Compose to setup a BIMData API.
 
 ## Prerequisites
-
   - Docker
   - Docker compose
+  - Access to our Docker registry to be able to download the images
 
 ## Usage
 
