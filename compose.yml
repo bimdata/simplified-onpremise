@@ -33,7 +33,7 @@ services:
     environment:
       # Web configuration
       - VIRTUAL_HOST=${API_DNS_NAME}
-      - API_URL=${API_URL}
+      - API_URL=${API_URL:-https://${API_DNS_NAME}}
       - ALLOWED_HOSTS=localhost,${API_DNS_NAME}
 
       # Secret configuration
@@ -54,13 +54,13 @@ services:
       - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
 
       # SMTP configuration
-      - SMTP_HOST=${API_SMTP_HOST}
-      - SMTP_PORT=${API_SMTP_PORT}
-      - SMTP_USER=${API_SMTP_USER}
-      - SMTP_PASS=${SMTP_PASS}
-      - SMTP_USE_TLS=${API_SMTP_USE_TLS}
-      - DEFAULT_FROM_EMAIL=${API_DEFAULT_FROM_EMAIL}
-      - DEBUG_MAIL_TO=${API_DEBUG_MAIL_TO}
+      - SMTP_HOST=${SMTP_HOST:-""}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USER=${SMTP_USER:-""}
+      - SMTP_PASS=${SMTP_PASS:-""}
+      - SMTP_USE_TLS=${SMTP_USE_TLS:-true}
+      - DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL:-""}
+      - DEBUG_MAIL_TO=${DEBUG_MAIL_TO:-""}
 
       # S3 storage
       - S3_ENABLED=false
@@ -110,7 +110,7 @@ services:
       test:
         - CMD-SHELL
         - celery
-        - -b amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@${RABBITMQ_HOST}:${RABBITMQ_PORT}/${RABBITMQ_VHOST}
+        - -b amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@${RABBITMQ_HOST}:${RABBITMQ_PORT}/${RABBITMQ_VHOST:-/}
         - -d celery@$$HOSTNAME
       start_period: 10s
       start_interval: 5s
