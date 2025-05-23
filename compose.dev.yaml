@@ -1,6 +1,5 @@
 ---
 services:
-  service:
   # Rabbitmq: not deploy by default, mainly here for dev purpose
   rabbitmq:
     image: rabbitmq:3.12-management-alpine

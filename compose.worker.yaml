@@ -1,7 +1,7 @@
 ---
 services:
   workers-b2d:
-    image: docker-registry.bimdata.io/on-premises/worker_b2d:${VERSION}
+    image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}worker_b2d:${VERSION}
     environment:
       - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
@@ -22,7 +22,7 @@ services:
     restart: unless-stopped
 
   workers-dwg-geometries:
-    image: docker-registry.bimdata.io/on-premises/dwg_worker:${VERSION}
+    image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}dwg_worker:${VERSION}
     environment:
       - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
@@ -44,7 +44,7 @@ services:
     restart: unless-stopped
 
   workers-dwg-properties:
-    image: docker-registry.bimdata.io/on-premises/dwg_worker:${VERSION}
+    image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}dwg_worker:${VERSION}
     environment:
       - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
@@ -66,7 +66,7 @@ services:
     restart: unless-stopped
 
   workers-elevation:
-    image: docker-registry.bimdata.io/on-premises/elevation_worker:${VERSION}
+    image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}elevation_worker:${VERSION}
     environment:
       - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
@@ -87,7 +87,7 @@ services:
     restart: unless-stopped
 
   workers-export:
-    image: docker-registry.bimdata.io/on-premises/workers:${VERSION}
+    image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}workers:${VERSION}
     environment:
       - WORKER_SCRIPT=workers.export
 
@@ -111,7 +111,7 @@ services:
     restart: unless-stopped
 
   workers-extract:
-    image: docker-registry.bimdata.io/on-premises/workers:${VERSION}
+    image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}workers:${VERSION}
 
     environment:
       - WORKER_SCRIPT=workers.extract
@@ -136,7 +136,7 @@ services:
     restart: unless-stopped
 
   workers-gltf:
-    image: docker-registry.bimdata.io/on-premises/workers:${VERSION}
+    image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}workers:${VERSION}
     environment:
       - WORKER_SCRIPT=workers.gltf
 
@@ -160,7 +160,7 @@ services:
     restart: unless-stopped
 
   workers-merge:
-    image: docker-registry.bimdata.io/on-premises/workers:${VERSION}
+    image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}workers:${VERSION}
     environment:
       - WORKER_SCRIPT=workers.merge
 
@@ -184,7 +184,7 @@ services:
     restart: unless-stopped
 
   workers-pointcloud:
-    image: docker-registry.bimdata.io/on-premises/pointcloud_worker:${VERSION}
+    image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}pointcloud_worker:${VERSION}
     environment:
       - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
@@ -206,7 +206,7 @@ services:
     restart: unless-stopped
 
   workers-preview-2d:
-    image: docker-registry.bimdata.io/on-premises/image_preview_worker:${VERSION}
+    image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}image_preview_worker:${VERSION}
     environment:
       - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
@@ -227,7 +227,7 @@ services:
     restart: unless-stopped
 
   workers-preview-3d:
-    image: docker-registry.bimdata.io/on-premises/viewer_360:${VERSION}
+    image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}viewer_360:${VERSION}
     environment:
       - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
@@ -248,7 +248,7 @@ services:
     restart: unless-stopped
 
   workers-preview-office:
-    image: docker-registry.bimdata.io/on-premises/office_preview_worker:${VERSION}
+    image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}office_preview_worker:${VERSION}
     environment:
       - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
@@ -270,7 +270,7 @@ services:
 
 
   workers-preview-pdf:
-    image: docker-registry.bimdata.io/on-premises/pdf_preview_worker:${VERSION}
+    image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}pdf_preview_worker:${VERSION}
     environment:
       - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
@@ -291,7 +291,7 @@ services:
     restart: unless-stopped
 
   workers-svg:
-    image: docker-registry.bimdata.io/on-premises/workers:${VERSION}
+    image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}workers:${VERSION}
     environment:
       - WORKER_SCRIPT=workers.svg
 
@@ -315,7 +315,7 @@ services:
     restart: unless-stopped
 
   workers-xkt:
-    image: docker-registry.bimdata.io/on-premises/xkt_worker:${VERSION}
+    image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}xkt_worker:${VERSION}
     environment:
       - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
@@ -336,7 +336,7 @@ services:
     restart: unless-stopped
 
   workers-xkt-v10:
-    image: docker-registry.bimdata.io/on-premises/xkt_v10_worker:${VERSION}
+    image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}xkt_v10_worker:${VERSION}
     environment:
       - API_URL=${API_URL}
       - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}

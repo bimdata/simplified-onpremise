@@ -25,7 +25,7 @@ services:
 
   # API: BIMData
   api: &API_BASE_DEFINITION
-    image: docker-registry.bimdata.io/on-premises/api:${VERSION}
+    image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}api:${VERSION}
     expose:
       - 8000
     volumes:
@@ -64,9 +64,6 @@ services:
 
       # S3 storage
       - S3_ENABLED=false
-
-      # TLS, if a custom CA is needed
-      # - CA_CERT=/opt/onprem-ca.crt
 
       # Misc configuration
       - ENV=on-premises

@@ -27,5 +27,5 @@ If you need to setup TLS, on the application server:
   - Create the file `config/certs/fullchain.pem` containing the certificate and all the needed intermediate certificates.
   - Create the file `config/certs/privkey.pem` containing the private key.
   - Modify `compose.yml`, in the `nginx-proxy` configuration, you need to uncomment some lines as instructed by some comments.
-  - Modify `config\nginx.conf` to uncomment the needed include (the is a comment that indicate which line)
+  - Modify `config\nginx.conf` to uncomment the needed include (there is a comment that indicate which line)
   - `docker compose up -d`
