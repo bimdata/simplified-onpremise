@@ -1,0 +1,119 @@
+---
+services:
+  # Web frontend: dispatch requests on the API & serve statics
+  nginx-proxy:
+    image: nginx:mainline
+    ports:
+      - ${PORT_PUBLIC_HTTP:-80}:80
+      # Uncomment the port for TLS
+      # - ${PORT_PUBLIC_HTTPS:-443}:443
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./data/api_storage:/var/www/static/api_storage/:ro
+      # Uncomment the volumes for TLS
+      # - ./config/tls.conf:/etc/nginx/conf.d/tls.conf:ro
+      # - ./config/certs:/etc/nginx/certs:ro
+
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "service", "nginx", "status"]
+      start_period: 10s
+      start_interval: 5s
+      interval: 60s
+      timeout: 1s
+      retries: 3
+
+  # API: BIMData
+  api: &API_BASE_DEFINITION
+    image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}api:${VERSION}
+    expose:
+      - 8000
+    volumes:
+      - ./data/api_storage:/opt/storage:rw
+    environment:
+      # Web configuration
+      - VIRTUAL_HOST=${API_DNS_NAME}
+      - API_URL=${API_URL:-https://${API_DNS_NAME}}
+      - ALLOWED_HOSTS=localhost,${API_DNS_NAME}
+
+      # Secret configuration
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+      - SECRET_KEY=${API_SECRET_KEY:?Error:API_SECRET_KEY is required, you must define it to a secure string in then .env file.}
+
+      # Postgres configuration
+      - DB_HOST=${API_DB_HOST}
+      - DB_PORT=${API_DB_PORT}
+      - DB_NAME=${API_DB_NAME}
+      - DB_USER=${API_DB_USER}
+      - DB_PASSWORD=${API_DB_PASSWORD}
+
+      # Rabbitmq configuration
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+
+      # SMTP configuration
+      - SMTP_HOST=${SMTP_HOST:-""}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USER=${SMTP_USER:-""}
+      - SMTP_PASS=${SMTP_PASS:-""}
+      - SMTP_USE_TLS=${SMTP_USE_TLS:-true}
+      - DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL:-""}
+      - DEBUG_MAIL_TO=${DEBUG_MAIL_TO:-""}
+
+      # S3 storage
+      - S3_ENABLED=false
+
+      # Misc configuration
+      - ENV=on-premises
+      - WORKERS=5
+      - ADMIN_INTERFACE=True
+      - IAM_SKIP_EXTERNAL_MIGRATION=True
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8000/health/"]
+      start_period: 15s
+      start_interval: 5s
+      interval: 60s
+      timeout: 1s
+      retries: 3
+
+  api-celeri-beat:
+    <<: *API_BASE_DEFINITION
+    command:
+      - celery
+      - --app=bimdata
+      - beat
+      - --scheduler=django_celery_beat.schedulers:DatabaseScheduler
+      - --loglevel=info
+    depends_on:
+      api:
+        condition: service_healthy
+        restart: true
+    # There is not really a good healthcheck for celeri beat
+    healthcheck:
+      disable: true
+
+  api-celeri-worker:
+    <<: *API_BASE_DEFINITION
+    command:
+      - celery
+      - --app=bimdata
+      - worker
+      - --loglevel=info
+    depends_on:
+      api:
+        condition: service_healthy
+        restart: true
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - celery
+        - -b amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@${RABBITMQ_HOST}:${RABBITMQ_PORT}/${RABBITMQ_VHOST:-/}
+        - -d celery@$$HOSTNAME
+      start_period: 10s
+      start_interval: 5s
+      interval: 60s
+      timeout: 3s
+      retries: 3

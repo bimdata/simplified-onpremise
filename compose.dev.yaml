@@ -1,0 +1,23 @@
+---
+services:
+  # Rabbitmq: not deploy by default, mainly here for dev purpose
+  rabbitmq:
+    image: rabbitmq:3.12-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    restart: unless-stopped
+
+  # DB: not deploy by default, mainly here for dev purpose
+  db:
+    image: postgres:17-alpine
+    expose:
+      - ${API_DB_PORT}:5432
+    environment:
+      - POSTGRES_DB=${API_DB_NAME}
+      - POSTGRES_USER=${API_DB_USER}
+      - POSTGRES_PASSWORD=${API_DB_PASSWORD}
+    restart: unless-stopped
