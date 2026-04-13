@@ -72,7 +72,11 @@ services:
       - IAM_SKIP_EXTERNAL_MIGRATION=True
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "--fail", "http://localhost:8000/health/"]
+      test:
+        - "CMD"
+        - "python"
+        - "-c"
+        - "import urllib.request as r; r.urlopen('http://localhost:8000/health/', timeout=1)"
       start_period: 15s
       start_interval: 5s
       interval: 60s
