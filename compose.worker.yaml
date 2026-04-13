@@ -1,26 +1,5 @@
 ---
 services:
-  workers-b2d:
-    image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}worker_b2d:${VERSION}
-    environment:
-      - API_URL=${API_URL:-https://${API_DNS_NAME}}
-      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
-
-      - RABBITMQ_HOST=${RABBITMQ_HOST}
-      - RABBITMQ_PORT=${RABBITMQ_PORT}
-      - RABBITMQ_USER=${RABBITMQ_USER}
-      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
-
-      - ENV=on-premises
-      - TIMEOUT=${WORKERS_B2D_TIMEOUT:-1800}
-    deploy:
-      replicas: ${WORKERS_B2D_REPLICA:-1}
-      resources:
-        limits:
-          cpus: ${WORKERS_B2D_CPU:-1}
-          memory: ${WORKERS_B2D_MEMORY:-6g}
-    restart: unless-stopped
-
   workers-dwg-geometries:
     image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}dwg_worker:${VERSION}
     environment:
