@@ -136,11 +136,6 @@ This is all the variable that can be set in the `.env` file.
 | WORKERS_SVG_CPU                | 1                          | Number of CPUs allocated for each replicas.                                         |
 | WORKERS_SVG_MEMORY             | 8g                         | Quantity of RAM allocated for each replicas.                                        |
 ||||
-| WORKERS_XKT_TIMEOUT            | 600                        | Timeout for a XKT v6 process.                                                       |
-| WORKERS_XKT_REPLICA            | 1                          | Number of replicas deployed on *each* worker server.                                |
-| WORKERS_XKT_CPU                | 1                          | Number of CPUs allocated for each replicas.                                         |
-| WORKERS_XKT_MEMORY             | 4g                         | Quantity of RAM allocated for each replicas.                                        |
-||||
 | WORKERS_XKT_V10_TIMEOUT        | 600                        | Timeout for a XTK v10 process.                                                      |
 | WORKERS_XKT_V10_REPLICA        | 1                          | Number of replicas deployed on *each* worker server.                                |
 | WORKERS_XKT_V10_CPU            | 1                          | Number of CPUs allocated for each replicas.                                         |
