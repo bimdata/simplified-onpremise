@@ -314,27 +314,6 @@ services:
           memory: ${WORKERS_SVG_MEMORY:-8g}
     restart: unless-stopped
 
-  workers-xkt:
-    image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}xkt_worker:${VERSION}
-    environment:
-      - API_URL=${API_URL:-https://${API_DNS_NAME}}
-      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
-
-      - RABBITMQ_HOST=${RABBITMQ_HOST}
-      - RABBITMQ_PORT=${RABBITMQ_PORT}
-      - RABBITMQ_USER=${RABBITMQ_USER}
-      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
-
-      - ENV=on-premises
-      - TIMEOUT=${WORKERS_XKT_TIMEOUT:-600}
-    deploy:
-      replicas: ${WORKERS_XKT_REPLICA:-1}
-      resources:
-        limits:
-          cpus: ${WORKERS_XKT_CPU:-1}
-          memory: ${WORKERS_XKT_MEMORY:-4g}
-    restart: unless-stopped
-
   workers-xkt-v10:
     image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}xkt_v10_worker:${VERSION}
     environment:
