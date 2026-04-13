@@ -66,11 +66,6 @@ This is all the variable that can be set in the `.env` file.
 | DOCKER_REGISTRY                | docker-registry.bimdata.io | Address of the docker registry from where BIMData application app pulled.           |
 | DOCKER_REGISTRY_IMAGE_PATH     | on-premises/               | Path in the docker registry address betfore the image name.                         |
 ||||
-| WORKERS_B2D_TIMEOUT            | 1800                       | Timeout for a b2d process.                                                          |
-| WORKERS_B2D_REPLICA            | 1                          | Number of replicas deployed on *each* worker server.                                |
-| WORKERS_B2D_CPU                | 1                          | Number of CPUs allocated for each replicas.                                         |
-| WORKERS_B2D_MEMORY             | 6g                         | Quantity of RAM allocated for each replicas.                                        |
-||||
 | WORKERS_DWG_GEOMETRIES_TIMEOUT | 14400                      | Timeout for a dwg geometry process.                                                 |
 | WORKERS_DWG_GEOMETRIES_REPLICA | 1                          | Number of replicas deployed on *each* worker server.                                |
 | WORKERS_DWG_GEOMETRIES_CPU     | 1                          | Number of CPUs allocated for each replicas.                                         |
