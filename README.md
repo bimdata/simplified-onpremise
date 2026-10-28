@@ -15,11 +15,20 @@ On all the servers:
   - Modify the `.env` to match your needs. The file should be the same on all servers.
 
 On the application server (the one running the API), run the following commands:
+  - `touch license.txt` and then put the license content in it
   - `mkdir -p data/api_storage`
   - `docker compose up -d`
 
 On the the worker servers:
   - `docker compose -f compose.worker.yaml up -d`
+
+### License
+The BIMData.io on-premises require a license file to run. If you don't have a license file, please contact us,
+so we can generate one.
+
+Each license is linked to an $API_DNS_NAME, and the API will only accept to responde to request from this domain.
+
+To use you license, create a file `license.txt` in this directory, and put the content of the license in it. The API will use it automaticly.
 
 ### TLS
 If you need to setup TLS, on the application server:
