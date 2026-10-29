@@ -135,6 +135,27 @@ services:
           memory: ${WORKERS_EXTRACT_MEMORY:-4g}
     restart: unless-stopped
 
+  workers-fragments:
+    image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}fragments_worker:${VERSION}
+    environment:
+      - API_URL=${API_URL:-https://${API_DNS_NAME}}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+
+      - ENV=on-premises
+      - TIMEOUT=${WORKERS_FRAGMENTS_TIMEOUT:-1800}
+    deploy:
+      replicas: ${WORKERS_FRAGMENTS_REPLICA:-1}
+      resources:
+        limits:
+          cpus: ${WORKERS_FRAGMENTS_CPU:-1}
+          memory: ${WORKERS_FRAGMENTS_MEMORY:-32g}
+    restart: unless-stopped
+
   workers-gltf:
     image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}workers:${VERSION}
     environment:
