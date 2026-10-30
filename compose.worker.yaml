@@ -4,7 +4,7 @@ services:
     image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}worker_b2d:${VERSION}
     environment:
       - API_URL=${API_URL:-https://${API_DNS_NAME}}
-      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in the .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
       - RABBITMQ_PORT=${RABBITMQ_PORT}
@@ -25,7 +25,7 @@ services:
     image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}dwg_worker:${VERSION}
     environment:
       - API_URL=${API_URL:-https://${API_DNS_NAME}}
-      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in the .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
       - RABBITMQ_PORT=${RABBITMQ_PORT}
@@ -47,7 +47,7 @@ services:
     image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}dwg_worker:${VERSION}
     environment:
       - API_URL=${API_URL:-https://${API_DNS_NAME}}
-      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in the .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
       - RABBITMQ_PORT=${RABBITMQ_PORT}
@@ -69,7 +69,7 @@ services:
     image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}elevation_worker:${VERSION}
     environment:
       - API_URL=${API_URL:-https://${API_DNS_NAME}}
-      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in the .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
       - RABBITMQ_PORT=${RABBITMQ_PORT}
@@ -92,7 +92,7 @@ services:
       - WORKER_SCRIPT=workers.export
 
       - API_URL=${API_URL:-https://${API_DNS_NAME}}
-      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in the .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
       - RABBITMQ_PORT=${RABBITMQ_PORT}
@@ -100,7 +100,7 @@ services:
       - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
 
       - ENV=on-premises
-      - CPU:-1_ALLOCATED=1
+      - CPU_ALLOCATED=${WORKERS_EXPORT_CPU:-1}
       - TIMEOUT=${WORKERS_EXPORT_TIMEOUT:-7200}
     deploy:
       replicas: ${WORKERS_EXPORT_REPLICA:-1}
@@ -117,7 +117,7 @@ services:
       - WORKER_SCRIPT=workers.extract
 
       - API_URL=${API_URL:-https://${API_DNS_NAME}}
-      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in the .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
       - RABBITMQ_PORT=${RABBITMQ_PORT}
@@ -125,7 +125,7 @@ services:
       - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
 
       - ENV=on-premises
-      - CPU:-1_ALLOCATED=1
+      - CPU_ALLOCATED=${WORKERS_EXTRACT_CPU:-1}
       - TIMEOUT=${WORKERS_EXTRACT_TIMEOUT:-7200}
     deploy:
       replicas: ${WORKERS_EXTRACT_REPLICA:-1}
@@ -139,7 +139,7 @@ services:
     image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}fragments_worker:${VERSION}
     environment:
       - API_URL=${API_URL:-https://${API_DNS_NAME}}
-      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in the .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
       - RABBITMQ_PORT=${RABBITMQ_PORT}
@@ -162,7 +162,7 @@ services:
       - WORKER_SCRIPT=workers.gltf
 
       - API_URL=${API_URL:-https://${API_DNS_NAME}}
-      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in the .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
       - RABBITMQ_PORT=${RABBITMQ_PORT}
@@ -170,7 +170,7 @@ services:
       - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
 
       - ENV=on-premises
-      - CPU:-1_ALLOCATED=1
+      - CPU_ALLOCATED=${WORKERS_GLTF_CPU:-1}
       - TIMEOUT=${WORKERS_GLTF_TIMEOUT:-36000}
     deploy:
       replicas: ${WORKERS_GLTF_REPLICA:-1}
@@ -186,7 +186,7 @@ services:
       - WORKER_SCRIPT=workers.merge
 
       - API_URL=${API_URL:-https://${API_DNS_NAME}}
-      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in the .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
       - RABBITMQ_PORT=${RABBITMQ_PORT}
@@ -194,7 +194,7 @@ services:
       - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
 
       - ENV=on-premises
-      - CPU:-1_ALLOCATED=1
+      - CPU_ALLOCATED=${WORKERS_MERGE_CPU:-1}
       - TIMEOUT=${WORKERS_MERGE_TIMEOUT:-7200}
     deploy:
       replicas: ${WORKERS_MERGE_REPLICA:-1}
@@ -208,7 +208,7 @@ services:
     image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}pointcloud_worker:${VERSION}
     environment:
       - API_URL=${API_URL:-https://${API_DNS_NAME}}
-      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in the .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
       - RABBITMQ_PORT=${RABBITMQ_PORT}
@@ -216,7 +216,7 @@ services:
       - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
 
       - ENV=on-premises
-      - CPU:-1_ALLOCATED=1
+      - CPU_ALLOCATED=${WORKERS_POINTCLOUD_CPU:-1}
       - TIMEOUT=${WORKERS_POINTCLOUD_TIMEOUT:-36000}
     deploy:
       replicas: ${WORKERS_POINTCLOUD_REPLICA:-1}
@@ -230,7 +230,7 @@ services:
     image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}image_preview_worker:${VERSION}
     environment:
       - API_URL=${API_URL:-https://${API_DNS_NAME}}
-      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in the .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
       - RABBITMQ_PORT=${RABBITMQ_PORT}
@@ -251,7 +251,7 @@ services:
     image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}viewer_360:${VERSION}
     environment:
       - API_URL=${API_URL:-https://${API_DNS_NAME}}
-      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in the .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
       - RABBITMQ_PORT=${RABBITMQ_PORT}
@@ -272,7 +272,7 @@ services:
     image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}office_preview_worker:${VERSION}
     environment:
       - API_URL=${API_URL:-https://${API_DNS_NAME}}
-      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in the .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
       - RABBITMQ_PORT=${RABBITMQ_PORT}
@@ -294,7 +294,7 @@ services:
     image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}pdf_preview_worker:${VERSION}
     environment:
       - API_URL=${API_URL:-https://${API_DNS_NAME}}
-      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in the .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
       - RABBITMQ_PORT=${RABBITMQ_PORT}
@@ -317,7 +317,7 @@ services:
       - WORKER_SCRIPT=workers.svg
 
       - API_URL=${API_URL:-https://${API_DNS_NAME}}
-      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in the .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
       - RABBITMQ_PORT=${RABBITMQ_PORT}
@@ -325,7 +325,7 @@ services:
       - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
 
       - ENV=on-premises
-      - CPU:-1_ALLOCATED=1
+      - CPU_ALLOCATED=${WORKERS_SVG_CPU:-1}
       - TIMEOUT=${WORKERS_SVG_TIMEOUT:-7200}
     deploy:
       replicas: ${WORKERS_SVG_REPLICA:-1}
@@ -339,7 +339,7 @@ services:
     image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}xkt_worker:${VERSION}
     environment:
       - API_URL=${API_URL:-https://${API_DNS_NAME}}
-      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in the .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
       - RABBITMQ_PORT=${RABBITMQ_PORT}
@@ -360,7 +360,7 @@ services:
     image: ${DOCKER_REGISTRY:-docker-registry.bimdata.io}/${DOCKER_REGISTRY_IMAGE_PATH:-on-premises/}xkt_v10_worker:${VERSION}
     environment:
       - API_URL=${API_URL:-https://${API_DNS_NAME}}
-      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in then .env file.}
+      - MASTER_TOKEN=${API_MASTER_TOKEN:?Error:API_MASTER_TOKEN is required, you must define it to a secure string in the .env file.}
 
       - RABBITMQ_HOST=${RABBITMQ_HOST}
       - RABBITMQ_PORT=${RABBITMQ_PORT}
